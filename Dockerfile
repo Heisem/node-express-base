@@ -10,8 +10,7 @@ RUN echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc && \
 ADD ./src ./src
 ADD ./config ./config
 
-# At this point, we move to a lighter machine
-# that only has the minimum required to run our server
+# node-slim
 FROM mhart/alpine-node:slim-16.4.2
 WORKDIR /srv
 COPY --from=build /srv .
