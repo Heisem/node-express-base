@@ -1,10 +1,10 @@
 const { Router } = require('express');
 
 const { Validate } = require('../../../lib/joi-to-swagger');
-const Test = require('./test');
+const Create = require('./create');
 
 const router = Router();
 
-router.post('/test', Validate(Test.validator), Test.handler);
+router.post('/', Validate(Create.validator), Create.handler);
 
 module.exports = router;

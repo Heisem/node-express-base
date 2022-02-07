@@ -3,6 +3,11 @@
 NODE_ENV=development npm start
 ```
 
+## Documentation
+```
+http://localhost:3000/documentation
+```
+
 ## Docker
 ```
 docker build --build-arg NPM_TOKEN=$NPM_TOKEN  -t express-base .

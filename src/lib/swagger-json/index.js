@@ -2,6 +2,7 @@
 const fs = require('fs');
 const j2s = require('joi-to-swagger');
 const defaultConfig = require('./default_config');
+const { v4: uuidv4 } = require('uuid');
 
 const getMetaValue = (joiDefinitions, key) => {
   if (joiDefinitions && joiDefinitions._meta) {
@@ -105,7 +106,7 @@ class Swagger {
 
   addResponses(joiDefinitions, toSwagger) {
     const responses = {};
-    const responseName = getMetaValue(joiDefinitions.response, 'modelName') || Date.now();
+    const responseName = getMetaValue(joiDefinitions.response, 'modelName') || joiDefinitions.responseModel || uuidv4();
     this.definitions[responseName] = toSwagger.properties.response;
     responses[200] = {
       description: joiDefinitions.response._descriptions || 'success',
@@ -124,7 +125,7 @@ class Swagger {
 
     this.currentRoute.push(path + method);
 
-    const name = joiDefinitions.model || Date.now();
+    const name = joiDefinitions.model || uuidv4();
     const tag = joiDefinitions.group || 'default';
     const summary = joiDefinitions.description || 'No desc';
     const modelName = getMetaValue(joiDefinitions.body, 'modelName') || name;
