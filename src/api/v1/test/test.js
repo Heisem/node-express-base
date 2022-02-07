@@ -1,11 +1,6 @@
 const Joi = require('joi');
 
 const handler = (req, res) => {
-  throw new Error('erere')
-  req.log.info({
-    message: 'Received payload',
-  });
-
   return res.json(req.body);
 };
 
