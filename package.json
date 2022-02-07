@@ -5,7 +5,8 @@
   "main": "./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./src/index.js"
+    "start": "node ./src/index.js",
+    "upgrade": "npx -p npm-check-updates ncu -u"
   },
   "author": "",
   "license": "ISC",
@@ -16,11 +17,15 @@
   "dependencies": {
     "boom": "^7.3.0",
     "config": "^3.3.7",
+    "cors": "^2.8.5",
     "express": "^4.17.2",
     "joi": "^17.6.0",
     "joi-express": "^1.0.3",
     "joi-to-swagger": "^6.0.1",
+    "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
+    "pino": "^7.6.5",
+    "pino-http": "^6.6.0",
     "swagger-ui-express": "^4.3.0"
   }
 }

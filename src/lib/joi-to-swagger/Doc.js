@@ -1,4 +1,3 @@
-
 const SwaggerBase = require('../swagger-json');
 const SwaggerUi = require('swagger-ui-express');
 const fs = require('fs');
@@ -7,54 +6,45 @@ const { regexpToPath } = require('./helper');
 const swaggerDoc = SwaggerBase.swaggerDoc;
 
 exports.Doc = (app, settings) => {
-    const {info, host, basePath, documentationPath} = settings;
+  const { info, host, basePath, documentationPath } = settings;
 
-    swaggerDoc.createJsonDoc(info, host, basePath);
+  swaggerDoc.createJsonDoc(info, host, basePath);
 
-    app._router.stack.forEach((middleware) => {
-        if (middleware.route) { // routes registered directly on the app
-            const { path, stack } = middleware.route;
-            if (path) {
-                stack.forEach((routeMehtod) => {
-                    if (routeMehtod.name == 'validateRequest') {
-                        const joiSchema = routeMehtod.handle('schemaBypass');
-                        swaggerDoc.addNewRoute(joiSchema, path, routeMehtod.method)
-                    }
-                })
+  app._router.stack.forEach((middleware) => {
+      
+    function deepRoute(middleware, accPath = '') {
+      if (middleware.route) {
+        // routes registered directly on the app
+        const { path, stack } = middleware.route;
+        if (path) {
+          stack.forEach((routeMehtod) => {
+            if (routeMehtod.name == 'validateRequest') {
+              const joiSchema = routeMehtod.handle('schemaBypass');
+              swaggerDoc.addNewRoute(joiSchema, accPath + path, routeMehtod.method);
             }
-        } else if (middleware.name === 'router' && middleware.handle.stack) { // router middleware)
-            function deepRoute(middleware, accPath) {
-                middleware.handle.stack.forEach((handler) => {
-                    if (middleware.name === 'router' && middleware.handle.stack) {
-                        if (middleware.handle.stack[0].handle.stack) {
-                            deepRoute(middleware.handle.stack[0], regexpToPath(middleware.regexp))
-                        }
-                    }
-
-                    if(!handler.route) {
-                        return;
-                    }
-
-                    const { path, stack } = handler.route;
-                    console.log(path)
-                    if (path) {
-                        stack.forEach((routeMehtod) => {
-                            if (routeMehtod.name == 'validateRequest') {
-                                const joiSchema = routeMehtod.handle('schemaBypass');
-                                swaggerDoc.addNewRoute(joiSchema, accPath + regexpToPath(middleware.regexp) + path, routeMehtod.method)
-                            }
-                        })
-                    }
-                });
-            }
-
-            deepRoute(middleware);
+          });
         }
-    });
+      } else if (middleware.name === 'router') {
+          for (let i = 0; i < middleware.handle.stack.length; i++) {
+            deepRoute(middleware.handle.stack[i], accPath + regexpToPath(middleware.regexp));
+          }
+      }
+    }
 
-    const swaggerDocument = fs.readFileSync('./swagger.json', 'utf8');
+    deepRoute(middleware);
+  });
 
-    let docPath = documentationPath || '/';
+  const swaggerDocument = fs.readFileSync('./swagger.json', 'utf8');
 
-    app.use(docPath, SwaggerUi.serve, SwaggerUi.setup(JSON.parse(swaggerDocument)));
-}
+  let docPath = documentationPath || '/';
+
+  var options = {
+    explorer: false,
+    swaggerOptions: {
+      withCredentials: true,
+    },
+  };
+
+  app.use(docPath, SwaggerUi.serve, SwaggerUi.setup(JSON.parse(swaggerDocument), options)
+  );
+};

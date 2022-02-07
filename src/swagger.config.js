@@ -1,9 +1,11 @@
-const settings = {
+const config = require('config');
+
+module.exports = {
   info: {
     swagger: '2.0',
     version: '1.0.0',
-    title: 'Title Example',
-    description: 'Express Base',
+    title: 'Api Documentation',
+    description: 'Documentation',
     termsOfService: 'http://swagger.io/terms/',
     contact: {
       name: 'Example team',
@@ -12,7 +14,7 @@ const settings = {
       name: 'MIT',
     },
   },
-  host: 'localhost:3000',
+  host: config.get('HOST'),
   basePath: '/',
-  documentaionPath: '/documentation',
+  documentationPath: '/documentation',
 };
