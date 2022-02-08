@@ -1,7 +1,6 @@
 const express = require('express');
 const config = require('config');
 const cors = require('cors');
-const _ = require('lodash');
 
 const { Doc } = require('./lib/joi-to-swagger');
 const {
