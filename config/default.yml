@@ -1,2 +1,7 @@
 PORT: 3000
 HOST: 'localhost:3000'
+
+logger:
+  redact:
+    - req.body.password
+    - req.headers.authorization
