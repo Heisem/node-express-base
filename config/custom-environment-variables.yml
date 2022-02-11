@@ -1,1 +1,5 @@
 PORT: PORT
+
+database:
+  mongo:
+    password: DATABASE_PASSWORD

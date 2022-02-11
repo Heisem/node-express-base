@@ -2,8 +2,8 @@ const Joi = require('joi');
 const { Tasks } = require('../../../models/Tasks');
 
 const validator = {
-  body: Joi.object({
-    name: Joi.string().required(),
+  params: Joi.object({
+    id: Joi.string().required(),
   }).required(),
   headers: Joi.object(),
   response: {
@@ -12,16 +12,16 @@ const validator = {
   }
 }
 
-validator.model = 'create_task';
+validator.model = 'get_task';
 validator.group = 'Tasks';
-validator.description = 'Create Task';
-validator.responseModel = 'create_task_response';
+validator.description = 'Get Task';
+validator.responseModel = 'get_task_response';
 
 const handler = async (req, res) => {
   var tasks = new Tasks();
-  const r = await tasks.create(req.body);
+  const r = await tasks.get(req.params.id);
 
-  return res.status(201).json(r);
+  return res.json(r);
 };
 
 module.exports = {

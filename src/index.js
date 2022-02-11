@@ -11,14 +11,14 @@ const {
 } = require('./middlewares');
 const v1 = require('./api/v1/routes');
 const status = require('./api/status');
+const { Client } = require('./shared/mongo');
 
 const app = express();
 
-app.use(Logger);
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
+app.use(Logger);
 app.use(CreatePayloadHandler);
 app.use(RequestHandler);
 
@@ -27,6 +27,7 @@ app.use('/api/v1', v1);
 
 app.use(ErrorHandler);
 
-app.listen(config.get('PORT'), () => {
+app.listen(config.get('PORT'), async () => {
+  await Client._connect();
   Doc(app, require('./swagger.config'));
 });

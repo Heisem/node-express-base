@@ -1,2 +1,8 @@
 PORT: 3000
 HOST: 'localhost:3000'
+
+database:
+  mongo:
+    user: root
+    port: 27017
+    name: tasks
