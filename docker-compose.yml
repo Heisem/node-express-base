@@ -2,16 +2,16 @@ version: '3.8'
 
 services:
 
-  # node-api:
-  #   container_name: node-api
-  #   build: ./
-  #   environment:
-  #     NODE_ENV: development
-  #     DATABASE_PASSWORD: example
-  #   networks:
-  #     - shared
-  #   depends_on:
-  #     - mongo
+  node-api:
+    container_name: node-api
+    build: ./
+    environment:
+      NODE_ENV: development
+      DATABASE_PASSWORD: example
+    networks:
+      - shared
+    depends_on:
+      - mongo
 
   mongo:
     image: mongo

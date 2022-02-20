@@ -6,3 +6,8 @@ database:
     user: root
     port: 27017
     name: tasks
+
+logger:
+  redact:
+    - req.body.password
+    - req.headers.authorization
