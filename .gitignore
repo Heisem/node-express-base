@@ -1,4 +1,5 @@
 node_modules
 swagger.json
+config/local.yml
 .log
 /*.sh
